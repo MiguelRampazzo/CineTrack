@@ -1,0 +1,49 @@
+        /* 
+   Paleta de Cores do CineTrack:
+   - Primária: #1A3A5C
+   - Acento: #C0392B
+   - Neutro/Fundo: #F5F5F5 
+   - Neutro/Texto: #333333  */
+   
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+
+html { font-size: 16px; }
+
+body { font-family: system-ui, sans-serif;color : #333333;; background: #F5F5F5; ;line-height: 1.5; }
+
+img { max-width: 100%; display: block; }
+
+button { font: inherit; cursor: pointer; color : black;  }
+
+.card {
+padding: 16px; 
+border: 1px solid #ddd; 
+border-radius: 8px; 
+box-shadow: 0 1px 4px #0002; 
+}
+
+header {
+    background: #1A3A5C;
+    color: white;
+    padding: 16px;
+}
+
+
+header a {
+    color: white;
+    background: #C0392B;
+    text-decoration: none;
+    padding: 6px;
+    border-radius: 4px;
+}
+.card img {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
+}
