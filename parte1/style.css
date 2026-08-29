@@ -1,9 +1,9 @@
         /* 
-   Paleta de Cores do CineTrack:
-   - Primária: #1A3A5C
-   - Acento: #C0392B
-   - Neutro/Fundo: #F5F5F5 
-   - Neutro/Texto: #333333  */
+Cores do CineTrack:
+- Primária: #1A3A5C
+- Acento: #C0392B
+- Neutro/Fundo: #F5F5F5 
+- Neutro/Texto: #333333  */
    
 * { 
     box-sizing: border-box; 
@@ -12,25 +12,77 @@
 }
 
 
-html { font-size: 16px; }
+html { 
+    font-size: 16px; 
+}
 
-body { font-family: system-ui, sans-serif;color : #333333;; background: #F5F5F5; ;line-height: 1.5; }
+body { 
+    font-family: system-ui, sans-serif;
+    color : #333333;
+    background: #F5F5F5;
+    line-height: 1.5; 
+}
 
-img { max-width: 100%; display: block; }
+img { 
+    max-width: 100%; 
+    display: block; 
+}
 
-button { font: inherit; cursor: pointer; color : black;  }
+button { 
+    font: inherit; 
+    cursor: pointer; 
+}
 
 .card {
-padding: 16px; 
-border: 1px solid #ddd; 
-border-radius: 8px; 
-box-shadow: 0 1px 4px #0002; 
+    padding: 16px; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; 
+    box-shadow: 0 1px 4px #0002; 
+    flex-direction: column;
+    gap: 6px;
+    width: 200px;
+    background: white;
+    display: flex   ;
 }
 
 header {
     background: #1A3A5C;
+    display: flex;
     color: white;
-    padding: 16px;
+    padding: 12 24px;
+    align-items: center;
+    justify-content: space-between;
+    gap : 16px;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    flex: 0 0 auto;
+    color: white;
+
+}
+
+header form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 300px;
+    justify-content: flex-end;
+}
+
+
+header input[type="search"] {
+    flex: 1 1 200px;
+    max-width: 400px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.card .acoes {
+    margin-top: auto;
+
 }
 
 
@@ -41,9 +93,85 @@ header a {
     padding: 6px;
     border-radius: 4px;
 }
+
 .card img {
     width: 120px;
     height: 180px;
     object-fit: cover;
     border-radius: 4px;
+}
+
+nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 16px 24px;
+}
+
+nav button {
+    padding: 6px 16px;
+    border: 1px solid #1A3A5C;
+    background: white;
+    color: #1A3A5C;
+    border-radius: 999px;
+}
+
+nav button.ativo {
+    background: #1A3A5C;
+    color: white;
+}
+
+#lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 24px;
+}
+
+.card h2 {
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.card p {
+    font-size: 0.85rem;
+    color: #555;
+}
+
+.card .badge {
+    display: inline-block;
+    align-self: flex-start;
+    padding: 2px 8px;
+    background: #eef2f5;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: #333;
+}
+
+.card .acoes {
+    margin-top: auto;
+    display: flex;
+    gap: 8px;
+    padding-top: 8px;
+}
+
+.card .acoes button {
+    flex: 1;
+    padding: 6px 0;
+    background: white;
+    border: 1px solid #1A3A5C;
+    color: #1A3A5C;
+    border-radius: 4px;
+    font-size: 0.85rem;
+}
+
+footer {
+    padding: 24px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+footer a {
+    color: #1A3A5C;
 }
