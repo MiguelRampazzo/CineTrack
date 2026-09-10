@@ -1,11 +1,28 @@
-/* 
-Cores do CineTrack:
-- Primária: #1A3A5C
-- Acento: #C0392B
-- Neutro/Fundo: #F5F5F5 
-- Neutro/Texto: #333333 
-*/
+/* 1. Variáveis CSS centralizadas no :root */
+:root {
+    --cor-primaria: #1A3A5C;
+    --cor-acento: #C0392B;
+    --cor-fundo: #F5F5F5;
+    --cor-card: #FFFFFF;
+    --cor-input: #FFFFFF;
+    --cor-texto: #333333;
+    --cor-borda: #DDDDDD;
+    --raio: 8px;
+    --espaco: 16px;
+}
 
+/* 2. Dark mode automático via prefers-color-scheme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --cor-fundo: #121212;
+        --cor-card: #1E1E1E;
+        --cor-input: #2A2A2A;
+        --cor-texto: #F3F3F3;
+        --cor-borda: #333333;
+    }
+}
+
+/* Reset */
 * { 
     box-sizing: border-box; 
     margin: 0; 
@@ -18,8 +35,8 @@ html {
 
 body { 
     font-family: system-ui, sans-serif;
-    color: #333333;
-    background: #F5F5F5;
+    color: var(--cor-texto);
+    background: var(--cor-fundo);
     line-height: 1.5; 
 }
 
@@ -35,7 +52,7 @@ button {
 
 /* Header */
 header {
-    background: #1A3A5C;
+    background: var(--cor-primaria);
     display: flex;
     color: white;
     padding: 12px 16px;
@@ -54,23 +71,28 @@ header h1 {
 header form {
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1 1 300px;
+    gap: 8px;
+    flex: 1 1 auto;
+    max-width: 500px;
     justify-content: flex-end;
 }
 
 header input[type="search"] {
-    flex: 1 1 200px;
-    max-width: 400px;
+    width: 100%;
+    min-width: 120px;
+    max-width: 350px;
     padding: 8px 12px;
     border-radius: 4px;
-    border: 1px solid #ccc;
+    border: 1px solid var(--cor-borda);
+    background: var(--cor-card);
+    color: var(--cor-texto);
     outline: none;
 }
 
-header a {
+/* Botão adicionar do cabeçalho */
+.btn-adicionar {
     color: white;
-    background: #C0392B;
+    background: var(--cor-acento);
     text-decoration: none;
     padding: 8px 14px;
     border-radius: 4px;
@@ -79,6 +101,13 @@ header a {
     align-items: center;
     justify-content: center;
     white-space: nowrap;
+    transition: background 200ms ease, transform 150ms ease;
+    flex-shrink: 0;
+}
+
+.btn-adicionar:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
 }
 
 .btn-adicionar .btn-texto {
@@ -94,41 +123,48 @@ nav {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
-    padding: 16px 24px;
+    padding: var(--espaco) 24px;
 }
 
 nav button {
     padding: 6px 16px;
-    border: 1px solid #1A3A5C;
-    background: white;
-    color: #1A3A5C;
+    border: 1px solid var(--cor-primaria);
+    background: var(--cor-card);
+    color: var(--cor-primaria);
     border-radius: 999px;
     font-size: 0.9rem;
+    transition: background 200ms ease, color 200ms ease;
 }
 
-nav button.ativo {
-    background: #1A3A5C;
+nav button:hover {
+    background: var(--cor-primaria);
     color: white;
 }
 
-/* Grade de cards com Grid */
+nav button.ativo {
+    background: var(--cor-primaria);
+    color: white;
+}
+
+/* Grade de cards */
 #lista {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
-    padding: 16px 24px;
+    gap: var(--espaco);
+    padding: var(--espaco) 24px;
 }
 
 /* Card */
 .card {
-    padding: 16px; 
-    border: 1px solid #ddd; 
-    border-radius: 8px; 
-    box-shadow: 0 1px 4px #0002; 
+    padding: var(--espaco); 
+    border: 1px solid var(--cor-borda); 
+    border-radius: var(--raio); 
+    border-top: 4px solid var(--cor-primaria); /* Linha decorativa visível no slide */
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15); 
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: white;
+    background: var(--cor-card);
 }
 
 .card img {
@@ -145,19 +181,50 @@ nav button.ativo {
 
 .card p {
     font-size: 0.85rem;
-    color: #555;
+    opacity: 0.85;
 }
 
+/* 3. Badges semânticos */
 .card .badge {
     display: inline-block;
     align-self: flex-start;
     padding: 2px 8px;
-    background: #eef2f5;
     border-radius: 4px;
     font-size: 0.75rem;
-    color: #333;
+    font-weight: 500;
 }
 
+.card .badge.assistido {
+    background: #d4edda;
+    color: #155724;
+}
+
+.card .badge.assistindo {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.card .badge.quero {
+    background: #cce5ff;
+    color: #004085;
+}
+
+@media (prefers-color-scheme: dark) {
+    .card .badge.assistido {
+        background: #1c3823;
+        color: #75b787;
+    }
+    .card .badge.assistindo {
+        background: #3e3314;
+        color: #ffd875;
+    }
+    .card .badge.quero {
+        background: #122840;
+        color: #7abaff;
+    }
+}
+
+/* Ações */
 .card .acoes {
     margin-top: auto;
     display: flex;
@@ -168,11 +235,27 @@ nav button.ativo {
 .card .acoes button {
     flex: 1;
     padding: 6px 0;
-    background: white;
-    border: 1px solid #1A3A5C;
-    color: #1A3A5C;
+    background: var(--cor-card);
+    border: 1px solid var(--cor-primaria);
+    color: var(--cor-primaria);
     border-radius: 4px;
     font-size: 0.85rem;
+    transition: background 200ms ease, color 200ms ease;
+}
+
+.card .acoes button:hover {
+    background: var(--cor-primaria);
+    color: white;
+}
+
+/* 4. Acessibilidade de foco */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #4A90E2;
+    outline-offset: 2px;
 }
 
 /* Rodapé */
@@ -180,14 +263,140 @@ footer {
     padding: 24px;
     text-align: center;
     font-size: 0.9rem;
-    color: #666;
+    opacity: 0.8;
 }
 
 footer a {
-    color: #1A3A5C;
+    color: var(--cor-primaria);
 }
 
-/* Media Query Desktop (>= 1024px) */
+/* Formulário geral (aplica tanto em adicionar.html quanto no modal) */
+#form-filme {
+    max-width: 480px;
+}
+
+#form-filme > div {
+    margin-bottom: 12px;
+}
+
+#form-filme label {
+    display: inline-block;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+#form-filme input,
+#form-filme select,
+#form-filme textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    background: var(--cor-input);
+    color: var(--cor-texto);
+    font: inherit;
+}
+
+#form-filme textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#form-filme button[type="submit"] {
+    background: var(--cor-acento);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: filter 150ms ease;
+}
+
+#form-filme button[type="submit"]:hover {
+    filter: brightness(1.1);
+}
+
+#form-filme button[type="button"] {
+    background: transparent;
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+    padding: 8px 16px;
+    border-radius: 4px;
+    margin-right: 8px;
+    transition: background 150ms ease;
+}
+
+#form-filme button[type="button"]:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Container de adicionar.html */
+body > .container-pagina {
+    max-width: 520px;
+    margin: 32px auto;
+    padding: 0 16px;
+}
+
+body > .container-pagina h1 {
+    margin: 16px 0 24px 0;
+}
+
+body > .container-pagina .back-link {
+    color: var(--cor-primaria);
+    text-decoration: none;
+}
+
+@media (prefers-color-scheme: dark) {
+    body > .container-pagina .back-link {
+        color: #7abaff;
+    }
+}
+
+/* Modal e Overlay */
+#modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    padding: var(--espaco);
+}
+
+#modal[hidden] {
+    display: none;
+}
+
+.modal-conteudo {
+    background: var(--cor-card);
+    color: var(--cor-texto);
+    padding: 24px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 440px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    animation: aparecer 200ms ease;
+}
+
+.modal-conteudo h2 {
+    margin-bottom: 16px;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Desktop */
 @media (min-width: 1024px) {
     header {
         padding: 16px 32px;

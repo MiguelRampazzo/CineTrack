@@ -8,55 +8,57 @@
 </head>
 <body>
 
-    <div>
-        <a href="index.html" class="back-link">&larr; Voltar</a>
+    <div class="container-pagina">
+        <div>
+            <a href="index.html" class="back-link">&larr; Voltar</a>
+        </div>
+
+        <h1>Adicionar filme</h1>
+
+        <form id="form-filme">
+            <div>
+                <label for="titulo">Título</label><br>
+                <input id="titulo" name="titulo" type="text" required>
+            </div>
+
+            <div>
+                <label for="ano">Ano</label><br>
+                <input id="ano" name="ano" type="number" min="1888" max="2026" step="1" required>
+            </div>
+
+            <div> 
+                <label for="genero">Gênero</label><br>
+                <input id="genero" name="genero" type="text" required>
+            </div>
+
+            <div>
+                <label for="poster">URL do pôster</label><br>
+                <input id="poster" name="poster" type="text">
+            </div>
+
+            <div>
+                <label for="status">Status</label><br>
+                <select id="status" name="status" required>
+                    <option value="assistido">Assistido</option>
+                    <option value="assistindo">Assistindo</option>
+                    <option value="quero" selected>Quero assistir</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="nota">Nota (1 a 5)</label><br>
+                <input id="nota" name="nota" type="number" min="1" max="5">
+            </div>
+
+            <div>
+                <label for="comentario">Comentário</label><br>
+                <textarea id="comentario" name="comentario"></textarea>
+            </div>
+
+            <button type="button" onclick="location.href='index.html'">Cancelar</button>
+            <button type="submit">Salvar</button>
+        </form>
     </div>
-
-    <h1>Adicionar filme</h1>
-
-    <form id="form-filme">
-        <div>
-            <label for="titulo">Título</label><br>
-            <input id="titulo" name="titulo" type="text" required>
-        </div><br>
-
-        <div>
-            <label for="ano">Ano</label><br>
-            <input id="ano" name="ano" type="number" min="1888" max="2026" step="1" required>
-        </div><br>
-
-        <div> 
-            <label for="genero">Gênero</label><br>
-            <input id="genero" name="genero" type="text" required>
-        </div><br>
-
-        <div>
-            <label for="poster">URL do pôster</label><br>
-            <input id="poster" name="poster" type="text">
-        </div><br>
-
-        <div>
-            <label for="status">Status</label><br>
-            <select id="status" name="status" required>
-                <option value="assistido">Assistido</option>
-                <option value="assistindo">Assistindo</option>
-                <option value="quero" selected>Quero assistir</option>
-            </select>
-        </div><br>
-
-        <div>
-            <label for="nota">Nota (1 a 5)</label><br>
-            <input id="nota" name="nota" type="number" min="1" max="5" class="input-small">
-        </div><br>
-
-        <div>
-            <label for="comentario">Comentário</label><br>
-            <textarea id="comentario" name="comentario"></textarea>
-        </div><br>
-
-        <button type="button">Cancelar</button>
-        <button type="submit">Salvar</button>
-    </form>
 
 </body>
 </html>
