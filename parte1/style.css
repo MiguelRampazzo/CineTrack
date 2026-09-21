@@ -11,7 +11,7 @@
     --espaco: 16px;
 }
 
-/* 2. Dark mode automático via prefers-color-scheme */
+/* 2. Dark mode automático via prefers-color-scheme 
 @media (prefers-color-scheme: dark) {
     :root {
         --cor-fundo: #121212;
@@ -20,7 +20,7 @@
         --cor-texto: #F3F3F3;
         --cor-borda: #333333;
     }
-}
+}*/
 
 /* Reset */
 * { 
