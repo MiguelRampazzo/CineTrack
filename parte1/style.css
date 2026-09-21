@@ -416,3 +416,78 @@ body > .container-pagina .back-link {
         display: inline;
     }
 }
+
+#form-filme {
+    max-width: 480px;
+    margin: 0 auto;
+    background: var(--cor-card);
+    padding: 24px;
+    border-radius: var(--raio);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#form-filme .campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#form-filme label {
+    font-weight: bold;
+    color: var(--cor-texto);
+}
+
+#form-filme input,
+#form-filme select,
+#form-filme textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    background: var(--cor-input);
+    color: var(--cor-texto);
+    font: inherit;
+}
+
+#form-filme textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#form-filme .botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+#form-filme button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font: inherit;
+    font-weight: 500;
+}
+
+#form-filme button[type="button"] {
+    background: transparent;
+    border: 1px solid var(--cor-borda);
+    color: var(--cor-texto);
+}
+
+#form-filme button[type="button"]:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+#form-filme button[type="submit"] {
+    background: var(--cor-primaria);
+    color: white;
+    border: 1px solid var(--cor-primaria);
+}
+
+#form-filme button[type="submit"]:hover {
+    filter: brightness(1.15);
+}
+
