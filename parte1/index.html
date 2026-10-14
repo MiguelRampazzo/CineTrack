@@ -18,7 +18,6 @@
         </button>
     </header>
 
-    <!-- 1. Botões de filtro (com data-status) -->
     <nav aria-label="Filtros de status">
         <button type="button" class="ativo" data-status="todos">Todos (0)</button>
         <button type="button" data-status="assistido">Assistido (0)</button>
@@ -34,6 +33,9 @@
         <div class="modal-conteudo">
             <form id="form-filme">
                 <h2>Adicionar filme</h2>
+
+
+                <div id="msg-erro" class="mensagem-erro" hidden aria-live="assertive"></div>
                 
                 <div class="campo">
                     <label for="titulo">Título</label>

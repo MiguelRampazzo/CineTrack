@@ -7,7 +7,7 @@ const filmesIniciais = [
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbY-KG6to1c6TnWtwLvFbPva_pqcffh7UlWiOCjmUFuA&s=10",
         status: "assistido",
         nota: 5,
-        comentario: ""
+        comentario: "Revejo sempre."
     },
     {
         id: 2,
@@ -27,7 +27,7 @@ const filmesIniciais = [
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-zSnnWPCIkWoYomaWdr3SGBMgysXPPP72UHtquNd4yw&s=10",
         status: "assistido",
         nota: 5,
-        comentario: ""
+        comentario: "Clássico nacional."
     },
     {
         id: 4,
@@ -36,7 +36,7 @@ const filmesIniciais = [
         genero: "Ficção científica",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcrdf5O1qC_1H-8_Maf1tFhlIGilNWhAsY1uRsrzNJKw&s=10",
         status: "assistindo",
-        nota: 5,
+        nota: 4,
         comentario: ""
     },
     {
@@ -53,10 +53,10 @@ const filmesIniciais = [
         id: 6,
         titulo: "Cidade de Deus",
         ano: 2002,
-        genero: "Drama / Crime",
+        genero: "Drama",
         poster: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVOODxarHc_hK9pYlqJI1dD3nPCjwETr5KSt2V-BaEig&s=10",
-        status: "assistido",
-        nota: 5,
+        status: "quero",
+        nota: 4,
         comentario: ""
     }
 ];
@@ -67,11 +67,10 @@ const CHAVE_STORAGE = "cinetrack:filmes";
 const salvar = () => localStorage.setItem(CHAVE_STORAGE, JSON.stringify(filmes));
 
 function carregar() {
-    const txt = localStorage.getItem(CHAVE_STORAGE);
-    if (txt) {
-        return JSON.parse(txt);
+    const dados = localStorage.getItem(CHAVE_STORAGE);
+    if (dados) {
+        return JSON.parse(dados);
     }
-    
     localStorage.setItem(CHAVE_STORAGE, JSON.stringify(filmesIniciais));
     return [...filmesIniciais];
 }
@@ -82,6 +81,7 @@ let editandoId = null;
 
 let termoAtual = "";
 let statusAtual = "todos";
+
 
 function aplicarFiltros(lista, opcoes) {
     const termo = opcoes.termo.toLowerCase().trim();
@@ -101,10 +101,12 @@ const listaElemento = document.querySelector("#lista");
 const navFiltros = document.querySelector("nav");
 const modal = document.querySelector("#modal");
 const form = document.querySelector("#form-filme");
+const msgErro = document.querySelector("#msg-erro");
 const btnAbrirModal = document.querySelector("#btn-abrir-modal");
 const linkAbrirModal = document.querySelector("#link-abrir-modal");
 const btnCancelar = document.querySelector("#btn-cancelar");
 const campoBusca = document.querySelector("header input[type='search']");
+
 
 function rotuloStatus(status) {
     if (status === "assistido") return "Assistido";
@@ -133,7 +135,7 @@ function criarCard(f) {
     card.append(img);
 
     const titulo = document.createElement("h2");
-    titulo.textContent = f.titulo; // Seguro contra XSS
+    titulo.textContent = f.titulo; // Proteção contra XSS
 
     const info = document.createElement("p");
     info.textContent = `${f.ano} · ${f.genero}`;
@@ -164,10 +166,10 @@ function criarCard(f) {
     return card;
 }
 
-function renderizarCards(lista) {
+function renderizarCards(colecao) {
     if (!listaElemento) return;
     const frag = document.createDocumentFragment();
-    lista.forEach((f) => frag.appendChild(criarCard(f)));
+    colecao.forEach((f) => frag.appendChild(criarCard(f)));
     listaElemento.replaceChildren(frag);
 }
 
@@ -197,10 +199,16 @@ function atualizarContadores() {
 function validarFilme(filme) {
     const erros = [];
     if (!filme.titulo || !filme.titulo.trim()) {
-        erros.push("Título obrigatório");
+        erros.push("Título é obrigatório.");
     }
     if (isNaN(filme.ano) || filme.ano < 1888 || filme.ano > 2030) {
-        erros.push("Ano inválido (deve estar entre 1888 e 2030)");
+        erros.push("Ano deve ser entre 1888 e 2030.");
+    }
+    if (!filme.genero || !filme.genero.trim()) {
+        erros.push("Gênero é obrigatório.");
+    }
+    if (isNaN(filme.nota) || filme.nota < 1 || filme.nota > 5) {
+        erros.push("Nota deve ser entre 1 e 5.");
     }
     return { valido: erros.length === 0, erros };
 }
@@ -208,39 +216,47 @@ function validarFilme(filme) {
 const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
 
 
-const abrir = () => (modal.hidden = false);
-const fechar = () => (modal.hidden = true);
+const abrir = () => {
+    if (msgErro) msgErro.hidden = true;
+    modal.hidden = false;
+};
 
-if (btnAbrirModal) {
-    btnAbrirModal.addEventListener("click", () => {
-        editandoId = null;
-        form.reset();
-        modal.querySelector("h2").textContent = "Adicionar filme";
-        abrir();
-    });
-}
+const fechar = () => {
+    modal.hidden = true;
+    editandoId = null;
+    form.reset();
+    if (msgErro) {
+        msgErro.hidden = true;
+        msgErro.textContent = "";
+    }
+};
 
-if (linkAbrirModal) {
-    linkAbrirModal.addEventListener("click", () => {
-        editandoId = null;
-        form.reset();
-        modal.querySelector("h2").textContent = "Adicionar filme";
-        abrir();
-    });
-}
+btnAbrirModal?.addEventListener("click", () => {
+    editandoId = null;
+    form.reset();
+    modal.querySelector("h2").textContent = "Adicionar filme";
+    abrir();
+});
 
-if (btnCancelar) btnCancelar.addEventListener("click", fechar);
+linkAbrirModal?.addEventListener("click", () => {
+    editandoId = null;
+    form.reset();
+    modal.querySelector("h2").textContent = "Adicionar filme";
+    abrir();
+});
+
+btnCancelar?.addEventListener("click", fechar);
 
 document.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && !modal.hidden) fechar();
 });
 
-modal.addEventListener("click", (e) => {
+modal?.addEventListener("click", (e) => {
     if (e.target === modal) fechar();
 });
 
 
-form.addEventListener("submit", (e) => {
+form?.addEventListener("submit", (e) => {
     e.preventDefault();
 
     const dados = Object.fromEntries(new FormData(form));
@@ -249,13 +265,19 @@ form.addEventListener("submit", (e) => {
 
     const { valido, erros } = validarFilme(dados);
     if (!valido) {
-        alert(erros.join("\n"));
+       
+        if (msgErro) {
+            msgErro.textContent = erros.join("\n");
+            msgErro.hidden = false;
+        }
         return;
     }
 
     if (editandoId !== null) {
+
         filmes = filmes.map((f) => (f.id === editandoId ? { ...f, ...dados } : f));
     } else {
+
         filmes = [...filmes, { id: gerarId(filmes), ...dados }];
     }
 
@@ -265,8 +287,8 @@ form.addEventListener("submit", (e) => {
 });
 
 
-listaElemento.addEventListener("click", (e) => {
-    // Remover
+listaElemento?.addEventListener("click", (e) => {
+
     const btnRemover = e.target.closest(".btn-remover");
     if (btnRemover) {
         if (!confirm("Remover este filme?")) return;
@@ -279,7 +301,6 @@ listaElemento.addEventListener("click", (e) => {
         return;
     }
 
-    // Editar
     const btnEditar = e.target.closest(".btn-editar");
     if (btnEditar) {
         const card = btnEditar.closest(".card");
@@ -302,12 +323,11 @@ listaElemento.addEventListener("click", (e) => {
 });
 
 
-navFiltros.addEventListener("click", (e) => {
+navFiltros?.addEventListener("click", (e) => {
     const botao = e.target.closest("button");
     if (!botao) return;
 
-    const anterior = navFiltros.querySelector(".ativo");
-    if (anterior) anterior.classList.remove("ativo");
+    navFiltros.querySelector(".ativo")?.classList.remove("ativo");
     botao.classList.add("ativo");
 
     statusAtual = botao.dataset.status;
