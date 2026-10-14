@@ -61,10 +61,42 @@ const filmesIniciais = [
     }
 ];
 
-let filmes = [...filmesIniciais];
+
+const CHAVE_STORAGE = "cinetrack:filmes";
+
+const salvar = () => localStorage.setItem(CHAVE_STORAGE, JSON.stringify(filmes));
+
+function carregar() {
+    const txt = localStorage.getItem(CHAVE_STORAGE);
+    if (txt) {
+        return JSON.parse(txt);
+    }
+    
+    localStorage.setItem(CHAVE_STORAGE, JSON.stringify(filmesIniciais));
+    return [...filmesIniciais];
+}
+
+let filmes = carregar();
 let editandoId = null;
 
-// Elementos do DOM
+
+let termoAtual = "";
+let statusAtual = "todos";
+
+function aplicarFiltros(lista, opcoes) {
+    const termo = opcoes.termo.toLowerCase().trim();
+    return lista
+        .filter((f) => f.titulo.toLowerCase().includes(termo))
+        .filter((f) => opcoes.status === "todos" || f.status === opcoes.status);
+}
+
+function atualizar() {
+    const visiveis = aplicarFiltros(filmes, { termo: termoAtual, status: statusAtual });
+    renderizarCards(visiveis);
+    atualizarContadores();
+}
+
+
 const listaElemento = document.querySelector("#lista");
 const navFiltros = document.querySelector("nav");
 const modal = document.querySelector("#modal");
@@ -72,8 +104,8 @@ const form = document.querySelector("#form-filme");
 const btnAbrirModal = document.querySelector("#btn-abrir-modal");
 const linkAbrirModal = document.querySelector("#link-abrir-modal");
 const btnCancelar = document.querySelector("#btn-cancelar");
+const campoBusca = document.querySelector("header input[type='search']");
 
-// Funções puras (Aula 1)
 function rotuloStatus(status) {
     if (status === "assistido") return "Assistido";
     if (status === "assistindo") return "Assistindo";
@@ -89,44 +121,7 @@ const estrelas = (nota) => {
     return resultado;
 };
 
-// Validação Pura (Tópico 3 da Aula 4)
-function validarFilme(filme) {
-    const erros = [];
-    if (!filme.titulo || !filme.titulo.trim()) {
-        erros.push("Título obrigatório");
-    }
-    if (isNaN(filme.ano) || filme.ano < 1888 || filme.ano > 2030) {
-        erros.push("Ano inválido (deve estar entre 1888 e 2030)");
-    }
-    return { valido: erros.length === 0, erros };
-}
 
-const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
-
-// Contadores de status da nav
-function atualizarContadores() {
-    const qtdTotal = filmes.length;
-    const qtdAssistido = filmes.filter((f) => f.status === "assistido").length;
-    const qtdAssistindo = filmes.filter((f) => f.status === "assistindo").length;
-    const qtdQuero = filmes.filter((f) => f.status === "quero").length;
-
-    const btnTodos = navFiltros?.querySelector('[data-status="todos"]');
-    const btnAssistido = navFiltros?.querySelector('[data-status="assistido"]');
-    const btnAssistindo = navFiltros?.querySelector('[data-status="assistindo"]');
-    const btnQuero = navFiltros?.querySelector('[data-status="quero"]');
-
-    if (btnTodos) btnTodos.textContent = `Todos (${qtdTotal})`;
-    if (btnAssistido) btnAssistido.textContent = `Assistido (${qtdAssistido})`;
-    if (btnAssistindo) btnAssistindo.textContent = `Assistindo (${qtdAssistindo})`;
-    if (btnQuero) btnQuero.textContent = `Quero assistir (${qtdQuero})`;
-
-    const smallRodape = document.querySelector("footer small");
-    if (smallRodape) {
-        smallRodape.textContent = `CineTrack © 2026 · ${qtdTotal} filmes cadastrados`;
-    }
-}
-
-// Criação dinâmica segura contra XSS e DocumentFragment (Tópico 4 da Aula 4)
 function criarCard(f) {
     const card = document.createElement("article");
     card.className = "card";
@@ -138,7 +133,7 @@ function criarCard(f) {
     card.append(img);
 
     const titulo = document.createElement("h2");
-    titulo.textContent = f.titulo;
+    titulo.textContent = f.titulo; // Seguro contra XSS
 
     const info = document.createElement("p");
     info.textContent = `${f.ano} · ${f.genero}`;
@@ -176,7 +171,43 @@ function renderizarCards(lista) {
     listaElemento.replaceChildren(frag);
 }
 
-// Abertura e fechamento do modal (Tópico 1 da Aula 4)
+function atualizarContadores() {
+    const qtdTotal = filmes.length;
+    const qtdAssistido = filmes.filter((f) => f.status === "assistido").length;
+    const qtdAssistindo = filmes.filter((f) => f.status === "assistindo").length;
+    const qtdQuero = filmes.filter((f) => f.status === "quero").length;
+
+    const btnTodos = navFiltros?.querySelector('[data-status="todos"]');
+    const btnAssistido = navFiltros?.querySelector('[data-status="assistido"]');
+    const btnAssistindo = navFiltros?.querySelector('[data-status="assistindo"]');
+    const btnQuero = navFiltros?.querySelector('[data-status="quero"]');
+
+    if (btnTodos) btnTodos.textContent = `Todos (${qtdTotal})`;
+    if (btnAssistido) btnAssistido.textContent = `Assistido (${qtdAssistido})`;
+    if (btnAssistindo) btnAssistindo.textContent = `Assistindo (${qtdAssistindo})`;
+    if (btnQuero) btnQuero.textContent = `Quero assistir (${qtdQuero})`;
+
+    const smallRodape = document.querySelector("footer small");
+    if (smallRodape) {
+        smallRodape.textContent = `CineTrack © 2026 · ${qtdTotal} filmes cadastrados`;
+    }
+}
+
+
+function validarFilme(filme) {
+    const erros = [];
+    if (!filme.titulo || !filme.titulo.trim()) {
+        erros.push("Título obrigatório");
+    }
+    if (isNaN(filme.ano) || filme.ano < 1888 || filme.ano > 2030) {
+        erros.push("Ano inválido (deve estar entre 1888 e 2030)");
+    }
+    return { valido: erros.length === 0, erros };
+}
+
+const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
+
+
 const abrir = () => (modal.hidden = false);
 const fechar = () => (modal.hidden = true);
 
@@ -208,7 +239,7 @@ modal.addEventListener("click", (e) => {
     if (e.target === modal) fechar();
 });
 
-// Captura do formulário, validação e salvamento (Tópicos 2, 3 e 6 da Aula 4)
+
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -228,12 +259,12 @@ form.addEventListener("submit", (e) => {
         filmes = [...filmes, { id: gerarId(filmes), ...dados }];
     }
 
-    renderizarCards(filmes);
-    atualizarContadores();
+    salvar();
+    atualizar();
     fechar();
 });
 
-// Delegação de eventos para remoção e edição (Tópico 5 da Aula 4)
+
 listaElemento.addEventListener("click", (e) => {
     // Remover
     const btnRemover = e.target.closest(".btn-remover");
@@ -243,8 +274,8 @@ listaElemento.addEventListener("click", (e) => {
         const id = Number(card.dataset.id);
 
         filmes = filmes.filter((f) => f.id !== id);
-        renderizarCards(filmes);
-        atualizarContadores();
+        salvar();
+        atualizar();
         return;
     }
 
@@ -270,7 +301,7 @@ listaElemento.addEventListener("click", (e) => {
     }
 });
 
-// Filtros da nav
+
 navFiltros.addEventListener("click", (e) => {
     const botao = e.target.closest("button");
     if (!botao) return;
@@ -279,11 +310,27 @@ navFiltros.addEventListener("click", (e) => {
     if (anterior) anterior.classList.remove("ativo");
     botao.classList.add("ativo");
 
-    const status = botao.dataset.status;
-    const filtrados = filmes.filter((f) => status === "todos" || f.status === status);
-    renderizarCards(filtrados);
+    statusAtual = botao.dataset.status;
+    atualizar();
 });
 
-// Renderização inicial
-renderizarCards(filmes);
-atualizarContadores();
+
+function debounce(fn, ms = 300) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), ms);
+    };
+}
+
+if (campoBusca) {
+    const aoDigitar = (e) => {
+        termoAtual = e.target.value;
+        atualizar();
+    };
+
+    campoBusca.addEventListener("input", debounce(aoDigitar, 300));
+}
+
+
+atualizar();

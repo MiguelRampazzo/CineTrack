@@ -61,35 +61,47 @@ header {
 
 header h1 {
     flex: 0 0 auto;
-    color: white;
-    font-size: clamp(1.2rem, 1rem + 2vw, 2.2rem);
+    font-size: clamp(1.4rem, 1.1rem + 1.8vw, 2.1rem);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #FFFFFF;
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    user-select: none;
 }
+
 
 header form {
     display: flex;
     align-items: center;
-    gap: 8px;
-    flex: 1 1 auto;
-    max-width: 500px;
-    justify-content: flex-end;
+    flex: 1 1 260px;
+    max-width: 440px;
+    margin: 0 16px;
 }
 
 header input[type="search"] {
     width: 100%;
-    min-width: 120px;
-    max-width: 350px;
-    padding: 8px 12px;
-    border-radius: 4px;
-    border: 1px solid var(--cor-borda);
-    background: var(--cor-card);
-    color: var(--cor-texto);
+    padding: 9px 16px;
+    background-color: #202730;
+    color: #F8FAFC;
+    border: 1px solid #334155;
+    border-radius: var(--raio);
+    font-size: 0.92rem;
+    font-family: inherit;
     outline: none;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
 }
 
-/* Botão adicionar estilizado no cabeçalho */
+header input[type="search"]::placeholder {
+    color: #94A3B8;
+}
+
+
 .btn-adicionar {
     background: var(--cor-acento);
-    color: #14181D; /* Texto escuro para garantir excelente legibilidade sobre o tom dourado */
+    color: #14181D; 
     border: none;
     outline: none;
     padding: 9px 18px;
@@ -107,26 +119,22 @@ header input[type="search"] {
     flex-shrink: 0;
 }
 
-/* Efeito ao passar o rato (hover) */
 .btn-adicionar:hover {
     filter: brightness(1.08);
     transform: translateY(-1px);
     box-shadow: 0 4px 14px rgba(229, 169, 60, 0.38);
 }
 
-/* Efeito ao clicar (active) */
 .btn-adicionar:active {
     transform: translateY(0);
     box-shadow: 0 1px 4px rgba(229, 169, 60, 0.2);
 }
 
-/* Foco acessível por teclado */
 .btn-adicionar:focus-visible {
     outline: 2px solid white;
     outline-offset: 2px;
 }
 
-/* Nav */
 nav {
     display: flex;
     gap: 8px;
