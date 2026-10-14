@@ -86,32 +86,44 @@ header input[type="search"] {
     outline: none;
 }
 
+/* Botão adicionar estilizado no cabeçalho */
 .btn-adicionar {
-    color: white;
     background: var(--cor-acento);
-    text-decoration: none;
-    padding: 8px 14px;
-    border-radius: 4px;
-    font-weight: bold;
+    color: #14181D; /* Texto escuro para garantir excelente legibilidade sobre o tom dourado */
+    border: none;
+    outline: none;
+    padding: 9px 18px;
+    border-radius: var(--raio);
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    white-space: nowrap;
-    transition: background 200ms ease, transform 150ms ease;
+    gap: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(229, 169, 60, 0.25);
+    transition: all 180ms ease;
     flex-shrink: 0;
 }
 
+/* Efeito ao passar o rato (hover) */
 .btn-adicionar:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px);
+    filter: brightness(1.08);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(229, 169, 60, 0.38);
 }
 
-.btn-adicionar .btn-texto {
-    display: none;
+/* Efeito ao clicar (active) */
+.btn-adicionar:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 4px rgba(229, 169, 60, 0.2);
 }
 
-.btn-adicionar .btn-icone {
-    display: inline;
+/* Foco acessível por teclado */
+.btn-adicionar:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
 
 /* Nav */

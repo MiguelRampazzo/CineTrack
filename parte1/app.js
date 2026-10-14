@@ -64,6 +64,7 @@ const filmesIniciais = [
 let filmes = [...filmesIniciais];
 let editandoId = null;
 
+// Elementos do DOM
 const listaElemento = document.querySelector("#lista");
 const navFiltros = document.querySelector("nav");
 const modal = document.querySelector("#modal");
@@ -72,6 +73,7 @@ const btnAbrirModal = document.querySelector("#btn-abrir-modal");
 const linkAbrirModal = document.querySelector("#link-abrir-modal");
 const btnCancelar = document.querySelector("#btn-cancelar");
 
+// Funções puras (Aula 1)
 function rotuloStatus(status) {
     if (status === "assistido") return "Assistido";
     if (status === "assistindo") return "Assistindo";
@@ -87,16 +89,31 @@ const estrelas = (nota) => {
     return resultado;
 };
 
+// Validação Pura (Tópico 3 da Aula 4)
+function validarFilme(filme) {
+    const erros = [];
+    if (!filme.titulo || !filme.titulo.trim()) {
+        erros.push("Título obrigatório");
+    }
+    if (isNaN(filme.ano) || filme.ano < 1888 || filme.ano > 2030) {
+        erros.push("Ano inválido (deve estar entre 1888 e 2030)");
+    }
+    return { valido: erros.length === 0, erros };
+}
+
+const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
+
+// Contadores de status da nav
 function atualizarContadores() {
     const qtdTotal = filmes.length;
     const qtdAssistido = filmes.filter((f) => f.status === "assistido").length;
     const qtdAssistindo = filmes.filter((f) => f.status === "assistindo").length;
     const qtdQuero = filmes.filter((f) => f.status === "quero").length;
 
-    const btnTodos = navFiltros.querySelector('[data-status="todos"]');
-    const btnAssistido = navFiltros.querySelector('[data-status="assistido"]');
-    const btnAssistindo = navFiltros.querySelector('[data-status="assistindo"]');
-    const btnQuero = navFiltros.querySelector('[data-status="quero"]');
+    const btnTodos = navFiltros?.querySelector('[data-status="todos"]');
+    const btnAssistido = navFiltros?.querySelector('[data-status="assistido"]');
+    const btnAssistindo = navFiltros?.querySelector('[data-status="assistindo"]');
+    const btnQuero = navFiltros?.querySelector('[data-status="quero"]');
 
     if (btnTodos) btnTodos.textContent = `Todos (${qtdTotal})`;
     if (btnAssistido) btnAssistido.textContent = `Assistido (${qtdAssistido})`;
@@ -109,41 +126,66 @@ function atualizarContadores() {
     }
 }
 
+// Criação dinâmica segura contra XSS e DocumentFragment (Tópico 4 da Aula 4)
+function criarCard(f) {
+    const card = document.createElement("article");
+    card.className = "card";
+    card.dataset.id = f.id;
+
+    const img = document.createElement("img");
+    img.src = f.poster || "docs/rascunho-tela.jpg";
+    img.alt = `Pôster do filme ${f.titulo}`;
+    card.append(img);
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = f.titulo;
+
+    const info = document.createElement("p");
+    info.textContent = `${f.ano} · ${f.genero}`;
+
+    const nota = document.createElement("p");
+    nota.textContent = `Nota: ${estrelas(f.nota)}`;
+
+    const badge = document.createElement("span");
+    badge.className = `badge ${f.status}`;
+    badge.textContent = rotuloStatus(f.status);
+
+    const acoes = document.createElement("div");
+    acoes.className = "acoes";
+
+    const btnEditar = document.createElement("button");
+    btnEditar.type = "button";
+    btnEditar.className = "btn-editar";
+    btnEditar.textContent = "Editar";
+
+    const btnRemover = document.createElement("button");
+    btnRemover.type = "button";
+    btnRemover.className = "btn-remover";
+    btnRemover.textContent = "Remover";
+
+    acoes.append(btnEditar, btnRemover);
+    card.append(titulo, info, nota, badge, acoes);
+
+    return card;
+}
+
 function renderizarCards(lista) {
     if (!listaElemento) return;
-    listaElemento.innerHTML = lista.map((f) => `
-        <article class="card" data-id="${f.id}">
-            <img src="${f.poster || 'docs/rascunho-tela.jpg'}" alt="Pôster do filme ${f.titulo}">
-            <h2>${f.titulo}</h2>
-            <p>${f.ano} · ${f.genero}</p>
-            <p>Nota: ${estrelas(f.nota)}</p>
-            <span class="badge ${f.status}">${rotuloStatus(f.status)}</span>
-            <div class="acoes">
-                <button type="button" class="btn-editar">Editar</button>
-                <button type="button" class="btn-remover">Remover</button>
-            </div>
-        </article>
-    `).join("");
+    const frag = document.createDocumentFragment();
+    lista.forEach((f) => frag.appendChild(criarCard(f)));
+    listaElemento.replaceChildren(frag);
 }
 
-function abrirModal() {
-    modal.removeAttribute("hidden");
-    modal.hidden = false;
-}
-
-function fecharModal() {
-    modal.setAttribute("hidden", "");
-    modal.hidden = true;
-    editandoId = null;
-    form.reset();
-}
+// Abertura e fechamento do modal (Tópico 1 da Aula 4)
+const abrir = () => (modal.hidden = false);
+const fechar = () => (modal.hidden = true);
 
 if (btnAbrirModal) {
     btnAbrirModal.addEventListener("click", () => {
         editandoId = null;
         form.reset();
         modal.querySelector("h2").textContent = "Adicionar filme";
-        abrirModal();
+        abrir();
     });
 }
 
@@ -152,22 +194,21 @@ if (linkAbrirModal) {
         editandoId = null;
         form.reset();
         modal.querySelector("h2").textContent = "Adicionar filme";
-        abrirModal();
+        abrir();
     });
 }
 
-if (btnCancelar) btnCancelar.addEventListener("click", fecharModal);
+if (btnCancelar) btnCancelar.addEventListener("click", fechar);
 
 document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && !modal.hidden) fecharModal();
+    if (e.key === "Escape" && !modal.hidden) fechar();
 });
 
 modal.addEventListener("click", (e) => {
-    if (e.target === modal) fecharModal();
+    if (e.target === modal) fechar();
 });
 
-const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
-
+// Captura do formulário, validação e salvamento (Tópicos 2, 3 e 6 da Aula 4)
 form.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -175,19 +216,24 @@ form.addEventListener("submit", (e) => {
     dados.ano = Number(dados.ano);
     dados.nota = Number(dados.nota);
 
+    const { valido, erros } = validarFilme(dados);
+    if (!valido) {
+        alert(erros.join("\n"));
+        return;
+    }
+
     if (editandoId !== null) {
-        // Modo Edição
         filmes = filmes.map((f) => (f.id === editandoId ? { ...f, ...dados } : f));
     } else {
-        // Modo Adição
         filmes = [...filmes, { id: gerarId(filmes), ...dados }];
     }
 
     renderizarCards(filmes);
     atualizarContadores();
-    fecharModal();
+    fechar();
 });
 
+// Delegação de eventos para remoção e edição (Tópico 5 da Aula 4)
 listaElemento.addEventListener("click", (e) => {
     // Remover
     const btnRemover = e.target.closest(".btn-remover");
@@ -219,11 +265,12 @@ listaElemento.addEventListener("click", (e) => {
             form.elements.comentario.value = f.comentario || "";
 
             modal.querySelector("h2").textContent = "Editar filme";
-            abrirModal();
+            abrir();
         }
     }
 });
 
+// Filtros da nav
 navFiltros.addEventListener("click", (e) => {
     const botao = e.target.closest("button");
     if (!botao) return;
@@ -237,5 +284,6 @@ navFiltros.addEventListener("click", (e) => {
     renderizarCards(filtrados);
 });
 
+// Renderização inicial
 renderizarCards(filmes);
 atualizarContadores();
