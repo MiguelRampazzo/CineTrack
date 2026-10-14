@@ -1,26 +1,25 @@
-/* 1. Variáveis CSS centralizadas no :root */
 :root {
-    --cor-primaria: #1A3A5C;
-    --cor-acento: #C0392B;
-    --cor-fundo: #F5F5F5;
-    --cor-card: #FFFFFF;
+    --cor-primaria: #14181D;
+    --cor-acento: #E5A93C;
+    --cor-fundo: #F4F6F8;          
+    --cor-card: #FFFFFF;           
     --cor-input: #FFFFFF;
-    --cor-texto: #333333;
-    --cor-borda: #DDDDDD;
+    --cor-texto: #111827;          
+    --cor-borda: #CBD5E1;          
     --raio: 8px;
     --espaco: 16px;
 }
-
-/* 2. Dark mode automático via prefers-color-scheme 
-@media (prefers-color-scheme: dark) {
+/* @media (prefers-color-scheme: dark) {
     :root {
-        --cor-fundo: #121212;
-        --cor-card: #1E1E1E;
-        --cor-input: #2A2A2A;
-        --cor-texto: #F3F3F3;
-        --cor-borda: #333333;
-    }
-}*/
+        --cor-primaria: #0F1216;
+        --cor-acento: #F5B84C;
+        --cor-fundo: #0B0E11;
+        --cor-card: #181D23;
+        --cor-input: #202730;
+        --cor-texto: #E6EDF3; 
+        --cor-borda: #2C3540;
+}
+*/
 
 /* Reset */
 * { 
@@ -195,19 +194,19 @@ nav button.ativo {
 }
 
 .card .badge.assistido {
-    background: #d4edda;
-    color: #155724;
-}
+        background: #163321;
+        color: #7ee787;
+    }
 
 .card .badge.assistindo {
-    background: #fff3cd;
-    color: #856404;
-}
+        background: #3b2d10;
+        color: #f6c167;
+    }
 
 .card .badge.quero {
-    background: #cce5ff;
-    color: #004085;
-}
+        background: #142a42;
+        color: #79c0ff;
+    }
 
 @media (prefers-color-scheme: dark) {
     .card .badge.assistido {

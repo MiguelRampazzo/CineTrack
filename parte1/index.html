@@ -12,10 +12,10 @@
         <h1>CineTrack</h1>
         <form role="search">
             <input type="search" placeholder="Buscar filme" aria-label="Buscar filme">
-            <a href="adicionar.html" class="btn-adicionar">
+            <button type="button" class="btn-adicionar" id="btn-abrir-modal">
                 <span class="btn-icone">+</span>
                 <span class="btn-texto">+ Adicionar</span>
-            </a>
+            </button>
         </form>
     </header>
 
@@ -28,79 +28,6 @@
 
     <main>
         <section id="lista" aria-live="polite">
-            
-            <article class="card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbY-KG6to1c6TnWtwLvFbPva_pqcffh7UlWiOCjmUFuA&s=10" alt="Pôster do filme A Origem">
-                <h2>A Origem</h2>
-                <p>2010 · Ficção científica</p>
-                <p>Nota: ★★★★★</p>
-                <span class="badge assistido">assistido</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button> 
-                </div> 
-            </article>
-
-            <article class="card">
-                <img src="https://down-br.img.susercontent.com/file/br-11134207-7r98o-m522jnfqqij4ab" alt="Pôster do filme Parasita">
-                <h2>Parasita</h2>
-                <p>2019 · Suspense</p>
-                <p>Nota: ★★★★☆</p>
-                <span class="badge assistido">assistido</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button> 
-                </div>
-            </article>
-
-            <article class="card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-zSnnWPCIkWoYomaWdr3SGBMgysXPPP72UHtquNd4yw&s=10" alt="Pôster do filme O Auto da Compadecida">
-                <h2>O Auto da Compadecida</h2>
-                <p>2000 · Comédia</p>
-                <p>Nota: ★★★★★</p>
-                <span class="badge assistido">assistido</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button>
-                </div>
-            </article>
-
-            <article class="card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRcrdf5O1qC_1H-8_Maf1tFhlIGilNWhAsY1uRsrzNJKw&s=10" alt="Pôster do filme Duna: Parte Dois">
-                <h2>Duna: Parte Dois</h2>
-                <p>2024 · Ficção científica</p>
-                <p>Nota: ★★★★★</p>
-                <span class="badge assistindo">assistindo</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button> 
-                </div>
-            </article>
-
-            <article class="card">
-                <img src="https://acdn-us.mitiendanube.com/stores/004/687/740/products/pos-01876-4c8ebd420e08f8359717181254801917-1024-1024.webp" alt="Pôster do filme Interestelar">
-                <h2>Interestelar</h2>
-                <p>2014 · Ficção científica</p>
-                <p>Nota: ★★★★★</p>
-                <span class="badge quero">quero assistir</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button> 
-                </div>
-            </article>
-
-            <article class="card">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVOODxarHc_hK9pYlqJI1dD3nPCjwETr5KSt2V-BaEig&s=10" alt="Pôster do filme Cidade de Deus">
-                <h2>Cidade de Deus</h2>
-                <p>2002 · Drama / Crime</p>
-                <p>Nota: ★★★★★</p>
-                <span class="badge assistido">assistido</span>
-                <div class="acoes">
-                    <button type="button">Editar</button>
-                    <button type="button">Remover</button>
-                </div>
-            </article>
-
         </section>
     </main>
 
@@ -154,7 +81,7 @@
     </div>
 
     <footer>
-        <p><a href="adicionar.html">Adicionar novo filme</a></p>
+        <p><button type="button" class="link-adicionar" id="link-abrir-modal">Adicionar novo filme</button></p>
         <p><a href="sobre.html">Sobre o projeto</a></p>
         <small>CineTrack © 2026 · 6 filmes cadastrados</small>
     </footer>
