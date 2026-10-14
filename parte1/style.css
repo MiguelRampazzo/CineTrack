@@ -21,7 +21,6 @@
 }
 */
 
-/* Reset */
 * { 
     box-sizing: border-box; 
     margin: 0; 
@@ -49,7 +48,6 @@ button {
     cursor: pointer; 
 }
 
-/* Header */
 header {
     background: var(--cor-primaria);
     display: flex;
@@ -88,7 +86,6 @@ header input[type="search"] {
     outline: none;
 }
 
-/* Botão adicionar do cabeçalho */
 .btn-adicionar {
     color: white;
     background: var(--cor-acento);
@@ -145,7 +142,6 @@ nav button.ativo {
     color: white;
 }
 
-/* Grade de cards */
 #lista {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -153,7 +149,6 @@ nav button.ativo {
     padding: var(--espaco) 24px;
 }
 
-/* Card */
 .card {
     padding: var(--espaco); 
     border: 1px solid var(--cor-borda); 
@@ -183,7 +178,6 @@ nav button.ativo {
     opacity: 0.85;
 }
 
-/* 3. Badges semânticos */
 .card .badge {
     display: inline-block;
     align-self: flex-start;
@@ -223,7 +217,6 @@ nav button.ativo {
     }
 }
 
-/* Ações */
 .card .acoes {
     margin-top: auto;
     display: flex;
@@ -247,7 +240,6 @@ nav button.ativo {
     color: white;
 }
 
-/* 4. Acessibilidade de foco */
 button:focus-visible,
 a:focus-visible,
 input:focus-visible,
@@ -257,7 +249,6 @@ textarea:focus-visible {
     outline-offset: 2px;
 }
 
-/* Rodapé */
 footer {
     padding: 24px;
     text-align: center;
@@ -269,7 +260,6 @@ footer a {
     color: var(--cor-primaria);
 }
 
-/* Formulário geral (aplica tanto em adicionar.html quanto no modal) */
 #form-filme {
     max-width: 480px;
 }
@@ -359,12 +349,12 @@ body > .container-pagina .back-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 50;
+    z-index: 100;
     padding: var(--espaco);
 }
 
 #modal[hidden] {
-    display: none;
+    display: none !important;
 }
 
 .modal-conteudo {
