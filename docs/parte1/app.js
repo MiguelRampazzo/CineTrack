@@ -1,3 +1,4 @@
+// filmes iniciais
 const filmesIniciais = [
     {
         id: 1,
@@ -61,7 +62,7 @@ const filmesIniciais = [
     }
 ];
 
-
+// Local Storage
 const CHAVE_STORAGE = "cinetrack:filmes";
 
 const salvar = () => localStorage.setItem(CHAVE_STORAGE, JSON.stringify(filmes));
@@ -78,7 +79,7 @@ function carregar() {
 let filmes = carregar();
 let editandoId = null;
 
-
+// filtros
 let termoAtual = "";
 let statusAtual = "todos";
 
@@ -96,7 +97,7 @@ function atualizar() {
     atualizarContadores();
 }
 
-
+//elementos aux
 const listaElemento = document.querySelector("#lista");
 const navFiltros = document.querySelector("nav");
 const modal = document.querySelector("#modal");
@@ -107,7 +108,7 @@ const linkAbrirModal = document.querySelector("#link-abrir-modal");
 const btnCancelar = document.querySelector("#btn-cancelar");
 const campoBusca = document.querySelector("header input[type='search']");
 
-
+// funções de formatação
 function rotuloStatus(status) {
     if (status === "assistido") return "Assistido";
     if (status === "assistindo") return "Assistindo";
@@ -123,7 +124,7 @@ const estrelas = (nota) => {
     return resultado;
 };
 
-
+// Renderização dos cards
 function criarCard(f) {
     const card = document.createElement("article");
     card.className = "card";
@@ -195,7 +196,7 @@ function atualizarContadores() {
     }
 }
 
-
+// Validador do form
 function validarFilme(filme) {
     const erros = [];
     if (!filme.titulo || !filme.titulo.trim()) {
@@ -215,7 +216,7 @@ function validarFilme(filme) {
 
 const gerarId = (lista) => Math.max(0, ...lista.map((f) => f.id)) + 1;
 
-
+// Controle do add
 const abrir = () => {
     if (msgErro) msgErro.hidden = true;
     modal.hidden = false;
@@ -255,7 +256,7 @@ modal?.addEventListener("click", (e) => {
     if (e.target === modal) fechar();
 });
 
-
+// Salva o Form
 form?.addEventListener("submit", (e) => {
     e.preventDefault();
 
@@ -286,7 +287,7 @@ form?.addEventListener("submit", (e) => {
     fechar();
 });
 
-
+// Ações nos Cards
 listaElemento?.addEventListener("click", (e) => {
 
     const btnRemover = e.target.closest(".btn-remover");
@@ -322,7 +323,7 @@ listaElemento?.addEventListener("click", (e) => {
     }
 });
 
-
+// Filtros de status
 navFiltros?.addEventListener("click", (e) => {
     const botao = e.target.closest("button");
     if (!botao) return;
@@ -335,6 +336,7 @@ navFiltros?.addEventListener("click", (e) => {
 });
 
 
+// Debounce para busca
 function debounce(fn, ms = 300) {
     let timer;
     return (...args) => {
