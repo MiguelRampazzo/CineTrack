@@ -10,17 +10,7 @@
     --espaco: 16px;
 }
 
-@media (prefers-color-scheme: dark) {
-    :root {
-        --cor-primaria: #0F1216;
-        --cor-acento: #F5B84C;
-        --cor-fundo: #0B0E11;
-        --cor-card: #181D23;
-        --cor-input: #202730;
-        --cor-texto: #E6EDF3; 
-        --cor-borda: #2C3540;
-    }
-}
+
 
 
 * { 
@@ -510,10 +500,83 @@ body > .container-pagina .back-link {
     white-space: pre-line;
 }
 
+
 @media (prefers-color-scheme: dark) {
+    :root {
+        --cor-primaria: #0F1216;
+        --cor-fundo: #0B0E11;
+        --cor-card: #181D23;
+        --cor-input: #202730;
+        --cor-texto: #E6EDF3;
+        --cor-borda: #30363D;
+    }
+
+    body {
+        background: var(--cor-fundo);
+        color: var(--cor-texto);
+    }
+
+    footer a {
+        color: var(--cor-acento);
+    }
+
+    nav button {
+        background: #181D23;
+        color: #C9D1D9;
+        border-color: #30363D;
+    }
+
+    nav button:hover {
+        background: #30363D;
+        color: #FFFFFF;
+        border-color: #8B949E;
+    }
+
+    nav button.ativo {
+        background: var(--cor-acento);
+        color: #14181D;
+        border-color: var(--cor-acento);
+        font-weight: 700;
+    }
+
+    .card {
+        border-top-color: var(--cor-acento);
+    }
+
+    .card .acoes button {
+        background: #202730;
+        color: #E6EDF3;
+        border-color: #3E4651;
+    }
+
+    .card .acoes button:hover {
+        background: #30363D;
+        color: #FFFFFF;
+        border-color: #8B949E;
+    }
+
+    .modal-conteudo {
+        border: 1px solid #30363D;
+    }
+
     .mensagem-erro {
         background-color: #450A0A;
         color: #FECACA;
         border-color: #991B1B;
     }
-}
+
+    #form-filme button[type="button"] {
+        border-color: #3E4651;
+        color: #E6EDF3;
+    }
+
+    #form-filme button[type="button"]:hover {
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    #form-filme button[type="submit"] {
+        background: var(--cor-acento);
+        color: #14181D;
+        border-color: var(--cor-acento);
+    }
+}   
