@@ -82,6 +82,7 @@ let editandoId = null;
 // filtros
 let termoAtual = "";
 let statusAtual = "todos";
+let ordemAtual = "titulo";
 
 
 function aplicarFiltros(lista, opcoes) {
@@ -91,8 +92,18 @@ function aplicarFiltros(lista, opcoes) {
         .filter((f) => opcoes.status === "todos" || f.status === opcoes.status);
 }
 
+// ordena uma cópia da lista (não muta a original)
+function ordenar(lista, criterio) {
+    const copia = [...lista];
+    if (criterio === "titulo") return copia.sort((a, b) => a.titulo.localeCompare(b.titulo, "pt-BR"));
+    if (criterio === "ano") return copia.sort((a, b) => a.ano - b.ano);
+    if (criterio === "nota") return copia.sort((a, b) => b.nota - a.nota);
+    return copia;
+}
+
 function atualizar() {
-    const visiveis = aplicarFiltros(filmes, { termo: termoAtual, status: statusAtual });
+    const filtrados = aplicarFiltros(filmes, { termo: termoAtual, status: statusAtual });
+    const visiveis = ordenar(filtrados, ordemAtual);
     renderizarCards(visiveis);
     atualizarContadores();
 }
@@ -332,6 +343,14 @@ navFiltros?.addEventListener("click", (e) => {
     botao.classList.add("ativo");
 
     statusAtual = botao.dataset.status;
+    atualizar();
+});
+
+// Ordenação
+const selectOrdenar = document.querySelector("#ordenar");
+
+selectOrdenar?.addEventListener("change", (e) => {
+    ordemAtual = e.target.value;
     atualizar();
 });
 
