@@ -580,3 +580,35 @@ body > .container-pagina .back-link {
         border-color: var(--cor-acento);
     }
 }   
+
+@media print {
+    :root {
+        --cor-primaria: #000000;
+        --cor-fundo: #FFFFFF;
+        --cor-card: #FFFFFF;
+        --cor-texto: #000000;
+        --cor-borda: #CCCCCC;
+    }
+
+    header form,
+    .btn-adicionar,
+    nav,
+    .card .acoes,
+    footer {
+        display: none;
+    }
+
+    header {
+        background: var(--cor-fundo);
+    }
+
+    header h1 {
+        color: var(--cor-texto);
+    }
+
+    .card {
+        box-shadow: none;
+        border-top-color: var(--cor-primaria);
+        break-inside: avoid;
+    }
+}
