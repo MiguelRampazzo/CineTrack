@@ -1,12 +1,21 @@
-import Titulo from './components/Titulo.jsx'
+// src/App.jsx
+import { filmesIniciais }
+  from "./data/filmes.js";
+import Header
+  from "./components/Header.jsx";
+import Filtros
+  from "./components/Filtros.jsx";
+import ListaFilmes
+  from "./components/ListaFilmes.jsx";
 
 function App() {
   return (
-    <main>
-      <Titulo />
-      <p>© {new Date().getFullYear()} CineTrack</p>
-    </main>
-  )
+    <>
+      <Header />
+      <Filtros />
+      <ListaFilmes filmes={filmesIniciais} />
+    </>
+  );
 }
 
-export default App
+export default App;
