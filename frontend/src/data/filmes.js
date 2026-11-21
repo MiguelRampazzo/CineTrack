@@ -60,3 +60,8 @@ export const filmesIniciais = [
     comentario: ""
   }
 ]
+
+export function gerarId(lista) {
+  if (lista.length === 0) return 1;
+  return Math.max(...lista.map((f) => f.id)) + 1;
+}
