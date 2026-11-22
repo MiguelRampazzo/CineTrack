@@ -105,6 +105,7 @@ function App() {
         ativo={status}
         aoMudar={setStatus}
       />
+      <p>Exibindo {visiveis.length} de {filmes.length} filmes</p>
       <main>{conteudo}</main>
       {editando !== null && (
         <ModalFilme
