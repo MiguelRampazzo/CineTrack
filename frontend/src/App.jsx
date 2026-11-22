@@ -13,14 +13,32 @@ import ListaFilmes
 import ModalFilme
   from "./components/ModalFilme.jsx";
 
+const CHAVE_FILTROS = "cinetrack:filtros";
+
+// Lê os filtros salvos; se a chave não existir
+// ou o JSON estiver corrompido, devolve os padrões
+function lerFiltros() {
+  try {
+    const salvos = JSON.parse(
+      localStorage.getItem(CHAVE_FILTROS));
+    return {
+      busca: salvos.busca ?? "",
+      status: salvos.status ?? "todos",
+    };
+  } catch {
+    return { busca: "", status: "todos" };
+  }
+}
+
 function App() {
   const [filmes, setFilmes] = useState([]);
   const [carregando, setCarregando] =
     useState(true);
   const [erro, setErro] = useState(null);
   const [status, setStatus] =
-    useState("todos");
-  const [busca, setBusca] = useState("");
+    useState(() => lerFiltros().status);
+  const [busca, setBusca] =
+    useState(() => lerFiltros().busca);
   // null: fechado; {}: novo; com id: edição
   const [editando, setEditando] =
     useState(null);
@@ -31,6 +49,11 @@ function App() {
       .catch((erro) => setErro(erro.message))
       .finally(() => setCarregando(false));
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem(CHAVE_FILTROS,
+      JSON.stringify({ busca, status }));
+  }, [busca, status]);
 
   useEffect(() => {
     document.title =
