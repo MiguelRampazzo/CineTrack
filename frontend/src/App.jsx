@@ -1,9 +1,9 @@
 // src/App.jsx
 import { useState, useEffect }
   from "react";
-import { gerarId }
-  from "./data/filmes.js";
-import { listar } from "./api.js";
+import {
+  listar, criar, atualizar, remover,
+} from "./api.js";
 import Header
   from "./components/Header.jsx";
 import Filtros
@@ -60,35 +60,31 @@ function App() {
       `CineTrack (${filmes.length})`;
   }, [filmes.length]);
 
-  function adicionar(novoFilme) {
-    setFilmes((anteriores) => [
-      ...anteriores,
-      {
-        ...novoFilme,
-        id: gerarId(anteriores),
-      },
-    ]);
-  }
-
-  function remover(id) {
-    setFilmes((anteriores) =>
-      anteriores.filter((filme) => filme.id !== id));
-  }
-
-  function editar(id, alteracoes) {
-    setFilmes((anteriores) =>
-      anteriores.map((filme) =>
-        filme.id === id ? { ...filme, ...alteracoes } : filme));
-  }
-
-  function salvar(dados) {
-    if (editando.id) {
-      editar(editando.id, dados);
-    } else {
-      adicionar(dados);
+  // Primeiro a API, depois o estado:
+  // se o fetch falhar, a tela não mente
+  async function salvar(dados) {
+    try {
+      if (editando.id) {
+        const at = await atualizar(editando.id, dados);
+        setFilmes((fs) => fs.map(
+          (f) => f.id === at.id ? at : f));
+      } else {
+        const novo = await criar(dados);
+        setFilmes((fs) => [...fs, novo]);
+      }
+      setEditando(null);
+    } catch (e) {
+      alert(`Não foi possível salvar: ${e.message}`);
     }
+  }
 
-    setEditando(null);
+  async function removerFilme(id) {
+    try {
+      await remover(id);
+      setFilmes((fs) => fs.filter((f) => f.id !== id));
+    } catch (e) {
+      alert(`Não foi possível remover: ${e.message}`);
+    }
   }
 
   const visiveis = filmes
@@ -112,7 +108,7 @@ function App() {
       <ListaFilmes
         filmes={visiveis}
         aoEditar={setEditando}
-        aoRemover={remover}
+        aoRemover={removerFilme}
       />
     );
   }
