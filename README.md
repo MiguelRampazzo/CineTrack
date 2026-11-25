@@ -53,15 +53,20 @@ Rotas:
 
 | Método | Rota | O que faz |
 |---|---|---|
-| GET | `/filmes` | Lista os filmes (aceita `?status=assistido|assistindo|quero`) |
+| GET | `/filmes` | Lista os filmes (aceita `?status=assistido|assistindo|quero` e `?q=` para buscar no título) |
 | GET | `/filmes/:id` | Retorna um filme (404 se não existir) |
-| POST | `/filmes` | Cria um filme (400 sem `titulo` ou `ano`; 201) |
-| PUT | `/filmes/:id` | Atualiza um filme, mantendo o id (404 se não existir) |
+| POST | `/filmes` | Cria um filme (201; 400 com a lista de erros) |
+| PUT | `/filmes/:id` | Atualiza um filme, mantendo o id (200; 400 com a lista de erros; 404 se não existir) |
 | DELETE | `/filmes/:id` | Remove um filme (204; 404 se não existir) |
+| GET | `/stats` | Total de filmes, contagem por status e média das notas |
+
+O POST e o PUT validam o filme: `titulo` obrigatório, `ano` entre 1888 e 2030, `nota` entre 1 e 5 e `status` igual a `assistido`, `assistindo` ou `quero`. Se algo estiver errado, a resposta é `400` com todos os problemas de uma vez: `{ "erros": ["nota deve estar entre 1 e 5", ...] }`.
+
+A documentação completa da API (corpos, parâmetros e códigos de resposta) está em [docs/api.md](docs/api.md).
 
 ### Como rodar o frontend
 
-Com o backend no ar, em outro terminal:
+Com o backend no ar, em outro terminal (a partir da raiz do repositório):
 
 ```bash
 cd frontend
@@ -73,4 +78,5 @@ Para gerar o build de produção: `npm run build` (saída em `frontend/dist/`).
 
 ## Testes
 
-O roteiro de testes da Parte 1 está em [docs/testes-parte1.md](docs/testes-parte1.md).
+- Parte 1: [docs/testes-parte1.md](docs/testes-parte1.md)
+- Parte 2 (teste ponta a ponta, com persistência após reiniciar o servidor): [docs/testes-parte2.md](docs/testes-parte2.md)

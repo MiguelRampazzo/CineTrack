@@ -11,19 +11,29 @@ const STATUS = [
     rotulo: "Quero assistir" },
 ];
 
-function Filtros({ ativo, aoMudar }) {
+function Filtros({
+  ativo, aoMudar, contagem, ordem, aoOrdenar,
+}) {
   return (
-    <nav>
+    <nav aria-label="Filtros de status">
       {STATUS.map((s) => (
         <button key={s.valor}
+          type="button"
           className={
             ativo === s.valor ? "ativo" : ""
           }
           onClick={() => aoMudar(s.valor)}
         >
-          {s.rotulo}
+          {s.rotulo} ({contagem[s.valor] ?? 0})
         </button>
       ))}
+      <select id="ordenar" aria-label="Ordenar por"
+        value={ordem}
+        onChange={(e) => aoOrdenar(e.target.value)}>
+        <option value="titulo">Título</option>
+        <option value="ano">Ano</option>
+        <option value="nota">Nota</option>
+      </select>
     </nav>
   );
 }

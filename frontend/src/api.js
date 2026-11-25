@@ -6,7 +6,16 @@ async function pedir(caminho, opcoes = {}) {
     headers: { "Content-Type": "application/json" },
     ...opcoes,
   });
-  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  if (!r.ok) {
+    // tenta ler o corpo de erro da API:
+    // { erros: [...] } (400) ou { erro: "..." } (404)
+    const corpo = await r.json().catch(() => ({}));
+    const erros = corpo.erros
+      ?? (corpo.erro ? [corpo.erro] : [`HTTP ${r.status}`]);
+    const e = new Error(erros.join("; "));
+    e.erros = erros;
+    throw e;
+  }
   return r.status === 204 ? null : r.json();
 }
 

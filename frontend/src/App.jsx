@@ -30,6 +30,18 @@ function lerFiltros() {
   }
 }
 
+// Mesmos critérios da Parte 1: título respeitando
+// acentos, ano crescente e nota decrescente
+function ordenar(lista, criterio) {
+  const copia = [...lista];
+  if (criterio === "ano")
+    return copia.sort((a, b) => a.ano - b.ano);
+  if (criterio === "nota")
+    return copia.sort((a, b) => b.nota - a.nota);
+  return copia.sort((a, b) =>
+    a.titulo.localeCompare(b.titulo, "pt-BR"));
+}
+
 function App() {
   const [filmes, setFilmes] = useState([]);
   const [carregando, setCarregando] =
@@ -39,9 +51,17 @@ function App() {
     useState(() => lerFiltros().status);
   const [busca, setBusca] =
     useState(() => lerFiltros().busca);
+  const [ordem, setOrdem] = useState("titulo");
   // null: fechado; {}: novo; com id: edição
   const [editando, setEditando] =
     useState(null);
+  // erros devolvidos pela API ao salvar
+  const [errosForm, setErrosForm] = useState([]);
+
+  function abrirModal(filme) {
+    setErrosForm([]);
+    setEditando(filme);
+  }
 
   useEffect(() => {
     listar()
@@ -73,12 +93,15 @@ function App() {
         setFilmes((fs) => [...fs, novo]);
       }
       setEditando(null);
+      setErrosForm([]);
     } catch (e) {
-      alert(`Não foi possível salvar: ${e.message}`);
+      // mostra no modal, que continua aberto
+      setErrosForm(e.erros ?? [e.message]);
     }
   }
 
   async function removerFilme(id) {
+    if (!confirm("Remover este filme?")) return;
     try {
       await remover(id);
       setFilmes((fs) => fs.filter((f) => f.id !== id));
@@ -87,7 +110,7 @@ function App() {
     }
   }
 
-  const visiveis = filmes
+  const filtrados = filmes
     .filter((filme) =>
       status === "todos" ||
       filme.status === status)
@@ -95,6 +118,12 @@ function App() {
       filme.titulo
         .toLowerCase()
         .includes(busca.toLowerCase()));
+  const visiveis = ordenar(filtrados, ordem);
+
+  // contadores dos botões de filtro
+  const contagem = { todos: filmes.length };
+  for (const f of filmes)
+    contagem[f.status] = (contagem[f.status] ?? 0) + 1;
 
   let conteudo;
   if (carregando) {
@@ -107,7 +136,7 @@ function App() {
     conteudo = (
       <ListaFilmes
         filmes={visiveis}
-        aoEditar={setEditando}
+        aoEditar={abrirModal}
         aoRemover={removerFilme}
       />
     );
@@ -118,17 +147,33 @@ function App() {
       <Header
         busca={busca}
         aoBuscar={setBusca}
-        aoAdicionar={() => setEditando({})}
+        aoAdicionar={() => abrirModal({})}
       />
       <Filtros
         ativo={status}
         aoMudar={setStatus}
+        contagem={contagem}
+        ordem={ordem}
+        aoOrdenar={setOrdem}
       />
-      <p>Exibindo {visiveis.length} de {filmes.length} filmes</p>
       <main>{conteudo}</main>
+      <footer>
+        <p>
+          <button type="button" className="link-adicionar"
+            onClick={() => abrirModal({})}>
+            Adicionar novo filme
+          </button>
+        </p>
+        <small>
+          CineTrack © 2026 · {filmes.length} filmes cadastrados
+          {visiveis.length !== filmes.length &&
+            ` · exibindo ${visiveis.length}`}
+        </small>
+      </footer>
       {editando !== null && (
         <ModalFilme
           filme={editando}
+          erros={errosForm}
           aoSalvar={salvar}
           aoFechar={() => setEditando(null)}
         />
